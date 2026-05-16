@@ -11,7 +11,6 @@ import net.minecraft.world.item.alchemy.Potions
 import java.util.concurrent.ConcurrentHashMap
 
 object BasePotionItem {
-
     private val potions = Int2ObjectOpenHashMap<Holder<Potion>>()
 
     init {

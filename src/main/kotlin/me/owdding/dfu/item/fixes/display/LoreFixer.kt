@@ -22,5 +22,4 @@ object LoreFixer : DataComponentFixer<ItemLore> {
         val lore = loreTag.mapNotNull { it.asString().getOrNull() }.map { LegacyTextFixer.parse(it) }
         return ItemLore(lore, lore)
     }
-
 }

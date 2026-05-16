@@ -1,6 +1,5 @@
 package me.owdding.dfu.item.fixes.display
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import me.owdding.dfu.item.DataComponentFixer
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
@@ -10,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.jvm.optionals.getOrNull
 
 object ColorFixer : DataComponentFixer<DyedItemColor> {
-
     private val cache = ConcurrentHashMap<Int, DyedItemColor>()
 
     private const val DISPLAY_TAG = "display"

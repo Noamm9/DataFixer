@@ -80,6 +80,4 @@ object HideFlagsFixer : DataComponentFixer<TooltipDisplay> {
             TooltipDisplay(false, components)
         }
     }
-
-
 }

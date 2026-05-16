@@ -15,7 +15,6 @@ import net.minecraft.nbt.Tag
 import net.minecraft.world.item.ItemStack
 
 object LegacyDataFixer {
-
     private val fixers = listOf(
         HideFlagsFixer,
         SkullTextureFixer,

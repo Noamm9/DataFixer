@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 
 object LegacyTextFixer {
-
     val EMPTY: Style = Style.EMPTY.withItalic(false)
 
     private const val CONTROL_CHAR = '§'
@@ -51,5 +50,4 @@ object LegacyTextFixer {
             }
         }
     }
-
 }
