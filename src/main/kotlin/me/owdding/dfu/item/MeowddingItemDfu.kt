@@ -5,7 +5,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object MeowddingItemDfu : Logger by LoggerFactory.getLogger("MeowddingItemDfu") {
-
     var logErrors: Boolean = false
 
     fun load() = LegacyDataFixer

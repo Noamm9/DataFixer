@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.component.WrittenBookContent
 
 object WrittenBookFixer : DataComponentFixer<WrittenBookContent> {
-
     override val type: DataComponentType<WrittenBookContent> = DataComponents.WRITTEN_BOOK_CONTENT
 
     override fun getData(tag: CompoundTag): WrittenBookContent? {

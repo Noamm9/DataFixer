@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item
 import kotlin.jvm.optionals.getOrNull
 
 interface DataComponentFixer<T : Any> {
-
     val type: DataComponentType<T>
     fun getData(tag: CompoundTag): T?
 
@@ -20,8 +19,6 @@ interface DataComponentFixer<T : Any> {
     fun apply(components: DataComponentPatch.Builder, tag: CompoundTag) {
         getData(tag)?.let { data -> components.set(this.type, data) }
     }
-
-    // Helpers
 
     fun CompoundTag.removeIfEmpty(path: String) {
         if (this.getCompoundOrEmpty(path).isEmpty) {

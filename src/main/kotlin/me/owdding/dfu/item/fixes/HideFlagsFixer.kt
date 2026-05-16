@@ -1,11 +1,9 @@
 package me.owdding.dfu.item.fixes
 
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap
 import me.owdding.dfu.item.DataComponentFixer
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.world.item.component.DyedItemColor
 import net.minecraft.world.item.component.TooltipDisplay
 import java.util.concurrent.ConcurrentHashMap
 
@@ -80,6 +78,4 @@ object HideFlagsFixer : DataComponentFixer<TooltipDisplay> {
             TooltipDisplay(false, components)
         }
     }
-
-
 }

@@ -14,7 +14,6 @@ import net.minecraft.world.level.saveddata.maps.MapId
 import kotlin.jvm.optionals.getOrNull
 
 object BaseItem {
-
     private val items = Int2ObjectOpenHashMap<Int2ObjectOpenHashMap<Item>>()
 
     init {
@@ -784,5 +783,4 @@ object BaseItem {
             )
         }
     }
-
 }

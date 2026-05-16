@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.jvm.optionals.getOrNull
 
 object SkullTextureFixer : DataComponentFixer<ResolvableProfile> {
-
     private val cache = ConcurrentHashMap<String, ResolvableProfile>()
     private const val TAG = "SkullOwner"
 
