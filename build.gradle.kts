@@ -3,27 +3,20 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.3.10"
-    id("fabric-loom") version "1.14-SNAPSHOT"
+    id("net.fabricmc.fabric-loom")
     id("maven-publish")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.3.10"
 }
 
 version = project.property("mod_version") as String
 group = project.property("maven_group") as String
+val targetJavaVersion = 25
 
-base {
-    archivesName.set(project.property("archives_base_name") as String)
-}
-
-val targetJavaVersion = 21
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    withSourcesJar()
-}
+base { archivesName.set(project.property("archives_base_name") as String) }
+java { toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion) }
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     include("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
@@ -36,7 +29,12 @@ tasks.processResources {
     filteringCharset = "UTF-8"
 
     filesMatching("fabric.mod.json") {
-        expand("version" to project.version, "minecraft_version" to project.property("minecraft_version") !!, "loader_version" to project.property("loader_version") !!, "kotlin_loader_version" to project.property("kotlin_loader_version") !!)
+        expand(
+            "version" to project.version,
+            "minecraft_version" to project.property("minecraft_version") !!,
+            "loader_version" to project.property("loader_version") !!,
+            "kotlin_loader_version" to project.property("kotlin_loader_version") !!
+        )
     }
 }
 
