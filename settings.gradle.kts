@@ -6,13 +6,16 @@ pluginManagement {
     }
 }
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("dev.kikugie.stonecutter") version "0.7.10"
 }
 
 rootProject.name = "item-data-fixer"
 
-val versions = listOf("1.21.11", "26.1", "26.2", "26.3")
+val isJitpack = providers.gradleProperty("jitpack").isPresent
+    || System.getenv("JITPACK") == "true"
+    || providers.gradleProperty("group").orElse("").get().startsWith("com.github")
+val versions = if (isJitpack) listOf("26.3") else listOf("1.21.11", "26.1", "26.2", "26.3")
 
 stonecutter {
     create(rootProject) {

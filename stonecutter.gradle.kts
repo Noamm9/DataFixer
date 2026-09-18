@@ -9,6 +9,12 @@ plugins {
 }
 stonecutter active "26.3"
 
+group = providers.gradleProperty("group").orElse("me.owdding").get()
+version = providers.gradleProperty("version").orElse(version.toString()).get()
+
+val effectiveGroup = providers.gradleProperty("group").orElse("me.owdding").get()
+val effectiveArtifact = if (effectiveGroup.startsWith("com.github")) "DataFixer" else "item-data-fixer"
+
 stonecutter parameters {
     swaps["mod_version"] = "\"" + property("version") + "\";"
     swaps["minecraft"] = "\"" + node.metadata.version + "\";"
@@ -67,8 +73,8 @@ stonecutter.versions.forEach { (project, version) ->
                 outgoing.artifact(tasks.named("remapJar"))
             }
 
-            outgoing.capability("me.owdding:item-data-fixer-$version-remapped:${rootProject.version}")
-            outgoing.capability("me.owdding:item-data-fixer:${rootProject.version}")
+            outgoing.capability("$effectiveGroup:$effectiveArtifact-$version-remapped:${rootProject.version}")
+            outgoing.capability("$effectiveGroup:$effectiveArtifact:${rootProject.version}")
         }
 
         val remappedRuntimeElements = configurations.create(gradleFriendlyVersion + "remappedRuntimeElements") {
@@ -98,8 +104,8 @@ stonecutter.versions.forEach { (project, version) ->
                 outgoing.artifact(tasks.named("remapJar"))
             }
 
-            outgoing.capability("me.owdding:item-data-fixer-$version-remapped:${rootProject.version}")
-            outgoing.capability("me.owdding:item-data-fixer:${rootProject.version}")
+            outgoing.capability("$effectiveGroup:$effectiveArtifact-$version-remapped:${rootProject.version}")
+            outgoing.capability("$effectiveGroup:$effectiveArtifact:${rootProject.version}")
         }
 
         dataFixerComponent.addVariantsFromConfiguration(remappedApiElements) {
@@ -137,8 +143,8 @@ stonecutter.versions.forEach { (project, version) ->
             outgoing.artifact(tasks.named("jar"))
         }
 
-        outgoing.capability("me.owdding:item-data-fixer-$version:${rootProject.version}")
-        outgoing.capability("me.owdding:item-data-fixer:${rootProject.version}")
+        outgoing.capability("$effectiveGroup:$effectiveArtifact-$version:${rootProject.version}")
+        outgoing.capability("$effectiveGroup:$effectiveArtifact:${rootProject.version}")
     }
 
     val runtimeElements = configurations.create(gradleFriendlyVersion + "runtimeElements") {
@@ -170,8 +176,8 @@ stonecutter.versions.forEach { (project, version) ->
             outgoing.artifact(tasks.named("jar"))
         }
 
-        outgoing.capability("me.owdding:item-data-fixer-$version:${rootProject.version}")
-        outgoing.capability("me.owdding:item-data-fixer:${rootProject.version}")
+        outgoing.capability("$effectiveGroup:$effectiveArtifact-$version:${rootProject.version}")
+        outgoing.capability("$effectiveGroup:$effectiveArtifact:${rootProject.version}")
     }
 
     val sourcesElements = configurations.create(gradleFriendlyVersion + "sources") {
@@ -191,8 +197,8 @@ stonecutter.versions.forEach { (project, version) ->
             outgoing.artifact(tasks.named("sourcesJar"))
         }
 
-        outgoing.capability("me.owdding:item-data-fixer-$version:${rootProject.version}")
-        outgoing.capability("me.owdding:item-data-fixer:${rootProject.version}")
+        outgoing.capability("$effectiveGroup:$effectiveArtifact-$version:${rootProject.version}")
+        outgoing.capability("$effectiveGroup:$effectiveArtifact:${rootProject.version}")
     }
 
     dataFixerComponent.addVariantsFromConfiguration(apiElements) {
@@ -210,7 +216,9 @@ publishing {
     publications {
         create("item-data-fixer", MavenPublication::class.java) {
             from(dataFixerComponent)
-            version = project.version.toString()
+            groupId = effectiveGroup
+            artifactId = effectiveArtifact
+            version = providers.gradleProperty("version").orElse(project.version.toString()).get()
 
             pom {
                 name.set("item-data-fixer")
