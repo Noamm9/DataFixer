@@ -14,6 +14,9 @@ version = providers.gradleProperty("version").orElse(version.toString()).get()
 
 val effectiveGroup = providers.gradleProperty("group").orElse("me.owdding").get()
 val effectiveArtifact = if (effectiveGroup.startsWith("com.github")) "DataFixer" else "item-data-fixer"
+val isJitpack = providers.gradleProperty("jitpack").isPresent
+    || System.getenv("JITPACK") == "true"
+    || effectiveGroup.startsWith("com.github")
 
 stonecutter parameters {
     swaps["mod_version"] = "\"" + property("version") + "\";"
@@ -214,20 +217,46 @@ stonecutter.versions.forEach { (project, version) ->
 
 publishing {
     publications {
-        create("item-data-fixer", MavenPublication::class.java) {
-            from(dataFixerComponent)
-            groupId = effectiveGroup
-            artifactId = effectiveArtifact
-            version = providers.gradleProperty("version").orElse(project.version.toString()).get()
+        if (isJitpack) {
+            // Plain jar publication so vanilla Gradle/Maven consumers resolve
+            // without capabilities or custom attributes.
+            create("item-data-fixer", MavenPublication::class.java) {
+                groupId = effectiveGroup
+                artifactId = effectiveArtifact
+                version = providers.gradleProperty("version").orElse(project.version.toString()).get()
 
-            pom {
-                name.set("item-data-fixer")
-                url.set("https://github.com/meowdding/item-data-fixer")
+                val versionProject = project(":26.3")
+                evaluationDependsOn(":26.3")
+                artifact(versionProject.tasks.named("jar"))
+                artifact(versionProject.tasks.named("sourcesJar"))
 
-                scm {
-                    connection.set("https://github.com/meowdding/item-data-fixer.git")
-                    developerConnection.set("git:https://github.com/meowdding/item-data-fixer.git")
+                pom {
+                    name.set("item-data-fixer")
                     url.set("https://github.com/meowdding/item-data-fixer")
+
+                    scm {
+                        connection.set("https://github.com/meowdding/item-data-fixer.git")
+                        developerConnection.set("git:https://github.com/meowdding/item-data-fixer.git")
+                        url.set("https://github.com/meowdding/item-data-fixer")
+                    }
+                }
+            }
+        } else {
+            create("item-data-fixer", MavenPublication::class.java) {
+                from(dataFixerComponent)
+                groupId = effectiveGroup
+                artifactId = effectiveArtifact
+                version = providers.gradleProperty("version").orElse(project.version.toString()).get()
+
+                pom {
+                    name.set("item-data-fixer")
+                    url.set("https://github.com/meowdding/item-data-fixer")
+
+                    scm {
+                        connection.set("https://github.com/meowdding/item-data-fixer.git")
+                        developerConnection.set("git:https://github.com/meowdding/item-data-fixer.git")
+                        url.set("https://github.com/meowdding/item-data-fixer")
+                    }
                 }
             }
         }

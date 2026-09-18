@@ -22,3 +22,20 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
     withSourcesJar()
 }
+
+if (providers.gradleProperty("jitpack").isPresent
+    || providers.gradleProperty("group").orElse("").get().startsWith("com.github")
+) {
+    // JitPack publishes a plain jar: drop the dev classifiers so the standard
+    // Maven coordinates (no classifier, "sources") resolve for consumers.
+    // Registered after `item-dfu`'s own afterEvaluate, so this wins.
+    afterEvaluate {
+        tasks.named<Jar>("jar") {
+            archiveClassifier = ""
+        }
+
+        tasks.named<Jar>("sourcesJar") {
+            archiveClassifier = "sources"
+        }
+    }
+}
